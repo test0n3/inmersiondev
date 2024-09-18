@@ -1,24 +1,31 @@
 const buttonGenerate = document.getElementById("generar");
 const buttonClean = document.getElementById("limpiar");
-const password = document.getElementById("contrasena");
+const numCharSpace = document.getElementById("cantidad");
+const passwordSpace = document.getElementById("contrasena");
+const notification = document.getElementById("notificacion");
 
 buttonClean.addEventListener("click", function () {
-  password.value = "";
+  numCharSpace.value = "";
+  passwordSpace.value = "";
+  hideNotification();
 });
 
 buttonGenerate.addEventListener("click", function () {
-  const numChar = Number(document.getElementById("cantidad").value);
+  hideNotification();
+  let numChar = Number(numCharSpace.value);
+  let newPassword = "";
   if (!checkNumChar(numChar)) {
     alert("La contraseña debe tener entre 6 y 22 caracteres");
     return;
   }
-  console.log("numChar:", numChar);
-  console.log("password:", password.value);
-  let newPassword = "";
+
   for (let i = 0; i < numChar; i++) {
     newPassword += genChar();
   }
-  password.value = newPassword;
+  passwordSpace.value = newPassword;
+  if (!isPasswordNotWeak(newPassword)) {
+    notification.classList.remove("hidden");
+  }
 });
 
 function checkNumChar(num) {
@@ -35,4 +42,17 @@ function genChar() {
   return isUpperCase ? options[pos].toUpperCase() : options[pos];
 }
 
-function isPasswordWeak() {}
+function isPasswordNotWeak(password) {
+  return (
+    password.match(/[a-z]/g) &&
+    password.match(/[A-Z]/g) &&
+    password.match(/[0-9]/g) &&
+    password.match(/[!@#\$%\^&\*()]/g)
+  );
+}
+
+function hideNotification() {
+  if (!notification.classList.contains("hidden")) {
+    notification.classList.add("hidden");
+  }
+}
