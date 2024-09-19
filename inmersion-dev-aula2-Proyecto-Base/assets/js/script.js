@@ -1,7 +1,7 @@
 const costsNames = [];
 const costsValues = [];
-const totalCost = document.getElementById("totalGastos");
 let totalCostSummatory = 0;
+const totalCost = document.getElementById("totalGastos");
 const costsListSpace = document.getElementById("listaDeGastos");
 
 function clickBoton() {
@@ -16,8 +16,9 @@ function clickBoton() {
 }
 
 function costValueOver150(costValue, costName) {
-  if (Number(costValue.value > 150))
-    alert(`El costo de ${costName.value} es mayor a $ 150}`);
+  if (Number(costValue) > 150) {
+    alert(`El costo de ${costName} es mayor a USD 150`);
+  }
 }
 
 function addCost(costName, costValue) {
@@ -27,8 +28,14 @@ function addCost(costName, costValue) {
 
 function updateCostsListSpace() {
   let list = "";
+  let item = "";
   for (let i = 0; i < costsNames.length; i++) {
-    list += `<li>${costsNames[i]} - USD ${costsValues[i]}<button onclick="deleteItem(${i})">Eliminar</button></li>`;
+    if (costsValues[i] > 150) {
+      item = `<li style="color: red">${costsNames[i]} - USD ${costsValues[i]}</span><button onclick="deleteItem(${i})">Eliminar</button></li>`;
+    } else {
+      item = `<li>${costsNames[i]} - USD ${costsValues[i]}<button onclick="deleteItem(${i})">Eliminar</button></li>`;
+    }
+    list += item;
   }
   costsListSpace.innerHTML = list;
 }
