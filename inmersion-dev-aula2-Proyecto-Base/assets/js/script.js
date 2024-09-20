@@ -81,15 +81,12 @@ function modifyCost(index) {
 
 function changeButton(type, index = null) {
   const formButton = document.getElementById("botonFormulario");
-  console.log("formButton", formButton);
   if (type === "modify") {
-    console.log("type:", type);
     formButton.innerText = "Modificar Gasto";
     formButton.setAttribute("onclick", `modifyCost(${index})`);
   }
 
   if (type === "add") {
-    console.log("type:", type);
     formButton.innerText = "Agregar Gasto";
     formButton.setAttribute("onclick", "clickBoton()");
   }
