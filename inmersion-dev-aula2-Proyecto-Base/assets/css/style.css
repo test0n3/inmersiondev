@@ -34,6 +34,7 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  height: 43px;
 }
 
 button:hover {
@@ -68,6 +69,12 @@ ul li p {
 
 ul li.highlight {
   color: red;
+}
+
+ul li section {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
 }
 
 .main-container {
