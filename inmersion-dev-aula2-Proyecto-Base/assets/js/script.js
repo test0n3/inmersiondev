@@ -5,29 +5,36 @@ const warningValue = 150;
 function clickBoton() {
   const costIndex = document.getElementById("indiceGasto");
   const costName = document.getElementById("nombreGasto");
+  const costDescription = document.getElementById("descripcionGasto");
   const costValue = document.getElementById("valorGasto");
   if (costName.value == "" || costValue.value == "") {
     alert("Por favor, complete los campos");
     return;
   }
   costValueGreaterThan(costValue.value);
-  costControl(costIndex.value, costName.value, costValue.value);
+  costControl(
+    costIndex.value,
+    costName.value,
+    costDescription.value,
+    costValue.value
+  );
   printMonthCosts();
 }
 
-function costControl(costIndex, costName, costValue) {
+function costControl(costIndex, costName, costDescription, costValue) {
   if (costIndex == "") {
-    addCost(costName, Number(costValue));
+    addCost(costName, costDescription, Number(costValue));
   }
   // else {
   //   editCost(costIndex, costName, costValue);
   // }
 }
 
-function addCost(costName, costValue) {
+function addCost(costName, costDescription, costValue) {
   const monthCostsSize = Object.keys(monthCosts).length;
   monthCosts[monthCostsSize + 1] = {
     name: costName,
+    description: costDescription,
     value: costValue,
   };
   console.log(monthCosts);
@@ -47,11 +54,14 @@ function printMonthCosts() {
   let costsList = "";
   for (let cost in monthCosts) {
     let costName = monthCosts[cost].name;
+    let costDescription = monthCosts[cost].description;
     let costValue = monthCosts[cost].value;
     costSum += monthCosts[cost].value;
     costsList += `<li ${
       costValue > warningValue ? 'class="warning"' : ""
-    }>${costName}: ${costValue.toFixed(2)}</li>`;
+    }><article class='cost-description'><p>${costName}</p><p>${costDescription}</p></article><article class='cost-value'>US$ ${costValue.toFixed(
+      2
+    )}</article></li>`;
   }
   costList.innerHTML = costsList;
   costTotal.innerText = costSum.toFixed(2);
@@ -60,5 +70,6 @@ function printMonthCosts() {
 function cleanFields() {
   document.getElementById("indiceGasto").value = "";
   document.getElementById("nombreGasto").value = "";
+  document.getElementById("descripcionGasto").value = "";
   document.getElementById("valorGasto").value = "";
 }
