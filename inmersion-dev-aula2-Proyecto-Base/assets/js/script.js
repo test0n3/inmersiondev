@@ -1,93 +1,64 @@
-const costsNames = [];
-const costsValues = [];
-const costsDescriptions = [];
-const totalCost = document.getElementById("totalGastos");
-const costsListSpace = document.getElementById("listaDeGastos");
+// const addCost = document.getElementById("botonFormulario");
+const monthCosts = {};
+const warningValue = 150;
 
-// add items to costsList
 function clickBoton() {
-  let costValue = document.getElementById("valorGasto");
-  let costName = document.getElementById("nombreGasto");
-  let costDescription = document.getElementById("descripcionGasto");
-  costValueOver150(costValue.value, costName.value);
-  addCost(costName.value, costValue.value, costDescription.value);
-  cleanForm();
-  showCostsList();
-  totalCost.innerText = calculateTotalCost().toFixed(2);
+  const costIndex = document.getElementById("indiceGasto");
+  const costName = document.getElementById("nombreGasto");
+  const costValue = document.getElementById("valorGasto");
+  if (costName.value == "" || costValue.value == "") {
+    alert("Por favor, complete los campos");
+    return;
+  }
+  costValueGreaterThan(costValue.value);
+  costControl(costIndex.value, costName.value, costValue.value);
+  printMonthCosts();
 }
 
-function addCost(costName, costValue, costDescription) {
-  costsNames.push(costName);
-  costsDescriptions.push(costDescription);
-  costsValues.push(Number(costValue));
-}
-// helper
-function costValueOver150(costValue, costName) {
-  if (Number(costValue) > 150) {
-    alert(`El costo de ${costName} es mayor a USD 150`);
+function costControl(costIndex, costName, costValue) {
+  if (costIndex == "") {
+    addCost(costName, Number(costValue));
   }
-}
-//helper
-function calculateTotalCost() {
-  return costsValues.reduce((acc, cost) => acc + cost, 0);
-}
-// showCostsList
-function showCostsList() {
-  let list = "";
-  let item = "";
-  for (let i = 0; i < costsNames.length; i++) {
-    const buttons = `<section><button onclick="modifyItem(${i})">Modificar</button><button onclick="deleteItem(${i})">Eliminar</button></section>`;
-    if (costsValues[i] > 150) {
-      item = `<li class="highlight"><article><p>${costsNames[i]} - USD ${costsValues[i]}</p><p>${costsDescriptions[i]}</p></article>${buttons}</li>`;
-    } else {
-      item = `<li><article><p>${costsNames[i]} - USD ${costsValues[i]}</p><p>${costsDescriptions[i]}</p></article>${buttons}</li>`;
-    }
-    list += item;
-  }
-  costsListSpace.innerHTML = list;
+  // else {
+  //   editCost(costIndex, costName, costValue);
+  // }
 }
 
-function cleanForm() {
-  document.getElementById("valorGasto").value = "";
-  document.getElementById("descripcionGasto").value = "";
+function addCost(costName, costValue) {
+  const monthCostsSize = Object.keys(monthCosts).length;
+  monthCosts[monthCostsSize + 1] = {
+    name: costName,
+    value: costValue,
+  };
+  console.log(monthCosts);
+  cleanFields();
+}
+
+function costValueGreaterThan(costValue) {
+  if (Number(costValue) > warningValue) {
+    alert(`Cuidado, el valor es superior a ${warningValue}`);
+  }
+}
+
+function printMonthCosts() {
+  const costList = document.getElementById("listaDeGastos");
+  const costTotal = document.getElementById("totalGastos");
+  let costSum = 0;
+  let costsList = "";
+  for (let cost in monthCosts) {
+    let costName = monthCosts[cost].name;
+    let costValue = monthCosts[cost].value;
+    costSum += monthCosts[cost].value;
+    costsList += `<li ${
+      costValue > warningValue ? 'class="warning"' : ""
+    }>${costName}: ${costValue.toFixed(2)}</li>`;
+  }
+  costList.innerHTML = costsList;
+  costTotal.innerText = costSum.toFixed(2);
+}
+
+function cleanFields() {
+  document.getElementById("indiceGasto").value = "";
   document.getElementById("nombreGasto").value = "";
-}
-
-function deleteItem(index) {
-  costsNames.splice(index, 1);
-  costsDescriptions.splice(index, 1);
-  costsValues.splice(index, 1);
-  showCostsList();
-  totalCost.innerText = calculateTotalCost().toFixed(2);
-}
-
-function modifyItem(index) {
-  document.getElementById("nombreGasto").value = costsNames[index];
-  document.getElementById("descripcionGasto").value = costsDescriptions[index];
-  document.getElementById("valorGasto").value = costsValues[index];
-  changeButton("modify", index);
-}
-
-function modifyCost(index) {
-  costsNames[index] = document.getElementById("nombreGasto").value;
-  costsDescriptions[index] = document.getElementById("descripcionGasto").value;
-  costsValues[index] = Number(document.getElementById("valorGasto").value);
-  costValueOver150(costsValues[index], costsNames[index]);
-  cleanForm();
-  showCostsList();
-  totalCost.innerText = calculateTotalCost().toFixed(2);
-  changeButton("add");
-}
-
-function changeButton(type, index = null) {
-  const formButton = document.getElementById("botonFormulario");
-  if (type === "modify") {
-    formButton.innerText = "Modificar Gasto";
-    formButton.setAttribute("onclick", `modifyCost(${index})`);
-  }
-
-  if (type === "add") {
-    formButton.innerText = "Agregar Gasto";
-    formButton.setAttribute("onclick", "clickBoton()");
-  }
+  document.getElementById("valorGasto").value = "";
 }

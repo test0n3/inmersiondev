@@ -15,8 +15,7 @@ body {
 }
 
 input[type="text"],
-input[type="number"],
-textarea {
+input[type="number"] {
   font-size: 1rem;
   width: calc(100% - 20px);
   padding: 10px;
@@ -34,7 +33,6 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  height: 43px;
 }
 
 button:hover {
@@ -60,21 +58,6 @@ ul li {
 
 ul li:last-child {
   border-bottom: none;
-}
-
-ul li p {
-  margin: 0;
-  padding: 0;
-}
-
-ul li.highlight {
-  color: red;
-}
-
-ul li section {
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
 }
 
 .main-container {
@@ -131,4 +114,12 @@ ul li section {
   font-size: 24px;
   text-align: center;
   color: #fff;
+}
+
+.warning {
+  color: red;
+}
+
+.hidden {
+  display: none;
 }
