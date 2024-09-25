@@ -71,25 +71,45 @@ table {
   padding: 0;
   margin-top: 20px;
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
 }
 
 #tablaDeGastos th,
 td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 5px;
 }
 
-#tablaDeGastos td:nth-child(3),
-td:last-child {
+#tablaDeGastos th:nth-child(1),
+td:nth-child(1) {
+  width: 400px;
+}
+
+#tablaDeGastos th:nth-child(2),
+td:nth-child(2) {
+  width: 115px;
+}
+
+#tablaDeGastos td:nth-child(2) {
   text-align: right;
 }
 
-#tablaDeGastos td:last-child {
+#tablaDeGastos th:last-child,
+td:last-child {
+  width: 310px;
+}
+
+#tablaDeGastos td:last-child nav {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: center;
   gap: 5px;
+  align-items: center;
+}
+
+#tablaDeGastos p {
+  padding: 0;
+  margin: 0;
 }
 
 .main-container {
