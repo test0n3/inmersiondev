@@ -66,6 +66,32 @@ ul li:last-child {
   border-bottom: none;
 }
 
+table {
+  border-collapse: collapse;
+  padding: 0;
+  margin-top: 20px;
+  width: 100%;
+  table-layout: auto;
+}
+
+#tablaDeGastos th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#tablaDeGastos td:nth-child(3),
+td:last-child {
+  text-align: right;
+}
+
+#tablaDeGastos td:last-child {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 5px;
+}
+
 .main-container {
   display: flex;
   justify-content: center;

@@ -24,10 +24,9 @@ function clickBoton() {
 function costControl(costIndex, costName, costDescription, costValue) {
   if (costIndex == "") {
     addCost(costName, costDescription, Number(costValue));
+  } else {
+    editCost(costIndex, costName, costDescription, Number(costValue));
   }
-  // else {
-  //   editCost(costIndex, costName, costValue);
-  // }
 }
 
 function addCost(costName, costDescription, costValue) {
@@ -38,7 +37,7 @@ function addCost(costName, costDescription, costValue) {
     description: costDescription,
     value: costValue,
   };
-  console.log(monthCosts);
+  console.log(monthCosts); // TODO delete this line
   cleanFields();
 }
 
@@ -55,6 +54,16 @@ function costValueGreaterThan(costValue) {
   }
 }
 
+function editCost(costIndex, costName, costDescription, costValue) {
+  monthCosts[costIndex] = {
+    name: costName,
+    description: costDescription,
+    value: costValue,
+  };
+  cleanFields();
+  document.getElementById("botonFormulario").innerText = "Agregar";
+}
+
 function printMonthCosts() {
   const costList = document.getElementById("listaDeGastos");
   const costTotal = document.getElementById("totalGastos");
@@ -64,11 +73,11 @@ function printMonthCosts() {
   for (let cost in monthCosts) {
     let { name, description, value } = monthCosts[cost];
     costSum += value;
-    costsList += `<li ${
+    costsList += `<tr ${
       value > warningValue ? 'class="warning"' : ""
-    }><article class='cost-description'><p>${name}</p><p>${description}</p></article><article class='cost-value'>US$ ${value.toFixed(
+    }><td>${name}</td><td>${description}</td><td>US$ ${value.toFixed(
       2
-    )}</article><article><button onclick='borrarGasto(${cost})'>Borrar</button></article></li>`;
+    )}</td><td>${genButtons(cost)}</td></tr>`;
   }
   costList.innerHTML = costsList;
   costTotal.innerText = costSum.toFixed(2);
@@ -84,4 +93,17 @@ function cleanFields() {
 function borrarGasto(index) {
   delete monthCosts[index];
   printMonthCosts();
+}
+
+function modificarGasto(index) {
+  const cost = monthCosts[index];
+  document.getElementById("indiceGasto").value = index;
+  document.getElementById("nombreGasto").value = cost.name;
+  document.getElementById("descripcionGasto").value = cost.description;
+  document.getElementById("valorGasto").value = cost.value;
+  document.getElementById("botonFormulario").innerText = "Modificar";
+}
+
+function genButtons(index) {
+  return `<button onclick='modificarGasto(${index})'>Modificar</button><button onclick='borrarGasto(${index})'>Borrar</button>`;
 }

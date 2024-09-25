@@ -31,7 +31,17 @@
             Agregar Gasto
           </button>
         </div>
-        <ul id="listaDeGastos"></ul>
+        <table id="tablaDeGastos">
+          <thead>
+            <tr>
+              <th>nombre</th>
+              <th>descripción</th>
+              <th>valor</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="listaDeGastos"></tbody>
+        </table>
         <div class="total">
           Total Mensual: US$ <span id="totalGastos">0.00</span>
         </div>
