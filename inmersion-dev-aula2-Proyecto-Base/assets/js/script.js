@@ -1,4 +1,3 @@
-// const addCost = document.getElementById("botonFormulario");
 const monthCosts = {};
 const warningValue = 150;
 
@@ -11,12 +10,12 @@ function clickBoton() {
     alert("Por favor, complete los campos");
     return;
   }
-  costValueGreaterThan(costValue.value);
-  costControl(
+  costValueGreaterThan(Number(costValue.value));
+  saveCosts(
     costIndex.value,
     costName.value,
     costDescription.value,
-    costValue.value
+    Number(costValue.value)
   );
   printMonthCosts();
 }
@@ -29,15 +28,17 @@ function costControl(costIndex, costName, costDescription, costValue) {
   }
 }
 
-function addCost(costName, costDescription, costValue) {
-  const monthCostsLast = genIndex();
-  console.log(monthCostsLast);
-  monthCosts[monthCostsLast] = {
+function saveCosts(costIndex, costName, costDescription, costValue) {
+  if (costIndex == "") {
+    costIndex = genIndex();
+  }
+  monthCosts[costIndex] = {
     name: costName,
     description: costDescription,
     value: costValue,
   };
   cleanFields();
+  document.getElementById("botonFormulario").innerText = "Agregar";
 }
 
 function genIndex() {
@@ -48,19 +49,9 @@ function genIndex() {
 }
 
 function costValueGreaterThan(costValue) {
-  if (Number(costValue) > warningValue) {
+  if (costValue > warningValue) {
     alert(`Cuidado, el valor es superior a ${warningValue}`);
   }
-}
-
-function editCost(costIndex, costName, costDescription, costValue) {
-  monthCosts[costIndex] = {
-    name: costName,
-    description: costDescription,
-    value: costValue,
-  };
-  cleanFields();
-  document.getElementById("botonFormulario").innerText = "Agregar";
 }
 
 function printMonthCosts() {
@@ -71,10 +62,9 @@ function printMonthCosts() {
 
   for (let cost in monthCosts) {
     let { name, description, value } = monthCosts[cost];
+    let isWarningClass = value > warningValue ? 'class="warning"' : "";
     costSum += value;
-    costsList += `<tr ${
-      value > warningValue ? 'class="warning"' : ""
-    }><td>${name}</td><td>${description}</td><td>US$ ${value.toFixed(
+    costsList += `<tr ${isWarningClass}><td><p>${name}</p><p>${description}</p></td><td>US$ ${value.toFixed(
       2
     )}</td><td>${genButtons(cost)}</td></tr>`;
   }
@@ -104,5 +94,5 @@ function modificarGasto(index) {
 }
 
 function genButtons(index) {
-  return `<button onclick='modificarGasto(${index})'>Modificar</button><button onclick='borrarGasto(${index})'>Borrar</button>`;
+  return `<nav><button onclick='modificarGasto(${index})'>Modificar</button><button onclick='borrarGasto(${index})'>Borrar</button></nav>`;
 }
