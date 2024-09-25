@@ -37,7 +37,6 @@ function addCost(costName, costDescription, costValue) {
     description: costDescription,
     value: costValue,
   };
-  console.log(monthCosts); // TODO delete this line
   cleanFields();
 }
 
