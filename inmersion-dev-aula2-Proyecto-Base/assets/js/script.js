@@ -31,14 +31,22 @@ function costControl(costIndex, costName, costDescription, costValue) {
 }
 
 function addCost(costName, costDescription, costValue) {
-  const monthCostsSize = Object.keys(monthCosts).length;
-  monthCosts[monthCostsSize + 1] = {
+  const monthCostsLast = genIndex();
+  console.log(monthCostsLast);
+  monthCosts[monthCostsLast] = {
     name: costName,
     description: costDescription,
     value: costValue,
   };
   console.log(monthCosts);
   cleanFields();
+}
+
+function genIndex() {
+  if (Object.keys(monthCosts).length == 0) {
+    return 1;
+  }
+  return Number(Object.keys(monthCosts).at(-1)) + 1;
 }
 
 function costValueGreaterThan(costValue) {
@@ -52,16 +60,15 @@ function printMonthCosts() {
   const costTotal = document.getElementById("totalGastos");
   let costSum = 0;
   let costsList = "";
+
   for (let cost in monthCosts) {
-    let costName = monthCosts[cost].name;
-    let costDescription = monthCosts[cost].description;
-    let costValue = monthCosts[cost].value;
-    costSum += monthCosts[cost].value;
+    let { name, description, value } = monthCosts[cost];
+    costSum += value;
     costsList += `<li ${
-      costValue > warningValue ? 'class="warning"' : ""
-    }><article class='cost-description'><p>${costName}</p><p>${costDescription}</p></article><article class='cost-value'>US$ ${costValue.toFixed(
+      value > warningValue ? 'class="warning"' : ""
+    }><article class='cost-description'><p>${name}</p><p>${description}</p></article><article class='cost-value'>US$ ${value.toFixed(
       2
-    )}</article></li>`;
+    )}</article><article><button onclick='borrarGasto(${cost})'>Borrar</button></article></li>`;
   }
   costList.innerHTML = costsList;
   costTotal.innerText = costSum.toFixed(2);
@@ -72,4 +79,9 @@ function cleanFields() {
   document.getElementById("nombreGasto").value = "";
   document.getElementById("descripcionGasto").value = "";
   document.getElementById("valorGasto").value = "";
+}
+
+function borrarGasto(index) {
+  delete monthCosts[index];
+  printMonthCosts();
 }
