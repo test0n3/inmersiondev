@@ -11,3 +11,6 @@
     - mensaje de alerta por gastos mayores a USD 150,
     - nuevo campo para incluir descripción de gasto
     - botón para modificar gastos registrados.
+  Extras:
+    - uso de objecto para almacenar la lista
+    - persistencia de datos con **localStorage**. 
