@@ -12,5 +12,6 @@
     - nuevo campo para incluir descripción de gasto
     - botón para modificar gastos registrados.
   Extras:
-    - uso de objecto para almacenar la lista
-    - persistencia de datos con **localStorage**. 
+    - [x] uso de objecto para almacenar la lista
+    - [x] persistencia de datos con **localStorage**. 
+    - [ ] persistencia de datos con **indexedDB**
