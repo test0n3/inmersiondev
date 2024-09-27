@@ -1,4 +1,3 @@
-const monthCosts = {};
 const warningValue = 150;
 
 function clickBoton() {
@@ -20,32 +19,30 @@ function clickBoton() {
   printMonthCosts();
 }
 
-function costControl(costIndex, costName, costDescription, costValue) {
-  if (costIndex == "") {
-    addCost(costName, costDescription, Number(costValue));
-  } else {
-    editCost(costIndex, costName, costDescription, Number(costValue));
-  }
+function limpiarLista() {
+  localStorage.clear();
+  printMonthCosts();
 }
 
 function saveCosts(costIndex, costName, costDescription, costValue) {
   if (costIndex == "") {
     costIndex = genIndex();
   }
-  monthCosts[costIndex] = {
+  const data = {
     name: costName,
     description: costDescription,
     value: costValue,
   };
+  localStorage.setItem(costIndex, JSON.stringify(data));
   cleanFields();
   document.getElementById("botonFormulario").innerText = "Agregar";
 }
 
 function genIndex() {
-  if (Object.keys(monthCosts).length == 0) {
+  if (localStorage.length == 0) {
     return 1;
   }
-  return Number(Object.keys(monthCosts).at(-1)) + 1;
+  return Number(Object.keys(localStorage).sort().at(-1)) + 1;
 }
 
 function costValueGreaterThan(costValue) {
@@ -60,14 +57,19 @@ function printMonthCosts() {
   let costSum = 0;
   let costsList = "";
 
-  for (let cost in monthCosts) {
-    let { name, description, value } = monthCosts[cost];
-    let isWarningClass = value > warningValue ? 'class="warning"' : "";
-    costSum += value;
-    costsList += `<tr ${isWarningClass}><td><p>${name}</p><p>${description}</p></td><td>US$ ${value.toFixed(
-      2
-    )}</td><td>${genButtons(cost)}</td></tr>`;
+  let lastExpense = Number(Object.keys(localStorage).sort().at(-1));
+  for (let i = 1; i <= lastExpense; i++) {
+    let data = JSON.parse(localStorage.getItem(i));
+    if (data == null) continue;
+    let isWarningClass = data.value > warningValue ? 'class="warning"' : "";
+    costSum += data.value;
+    costsList += `<tr ${isWarningClass}><td><p>${data.name}</p><p>${
+      data.description
+    }</p></td><td>US$ ${data.value.toFixed(2)}</td><td>${genButtons(
+      i
+    )}</td></tr>`;
   }
+
   costList.innerHTML = costsList;
   costTotal.innerText = costSum.toFixed(2);
 }
@@ -80,12 +82,12 @@ function cleanFields() {
 }
 
 function borrarGasto(index) {
-  delete monthCosts[index];
+  localStorage.removeItem(index);
   printMonthCosts();
 }
 
 function modificarGasto(index) {
-  const cost = monthCosts[index];
+  const cost = JSON.parse(localStorage.getItem(index));
   document.getElementById("indiceGasto").value = index;
   document.getElementById("nombreGasto").value = cost.name;
   document.getElementById("descripcionGasto").value = cost.description;
@@ -96,3 +98,5 @@ function modificarGasto(index) {
 function genButtons(index) {
   return `<nav><button onclick='modificarGasto(${index})'>Modificar</button><button onclick='borrarGasto(${index})'>Borrar</button></nav>`;
 }
+
+printMonthCosts();
